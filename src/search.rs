@@ -1,4 +1,4 @@
-pub fn find_pattern(needle: &Vec<u8>, haystack: &Vec<u8>) -> Option<(usize, usize)> {
+pub fn find_pattern(needle: &Vec<u8>, haystack: &[u8]) -> Option<(usize, usize)> {
     let mut needle_idx = 0;
 
     let mut found_beg_idx: Option<usize> = None;

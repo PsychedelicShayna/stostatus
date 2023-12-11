@@ -1,7 +1,6 @@
 use std::process::exit;
 
 mod api;
-mod data;
 mod error;
 mod gzip;
 mod http;

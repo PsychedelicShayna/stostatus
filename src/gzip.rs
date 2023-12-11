@@ -90,9 +90,8 @@ pub unsafe fn gzip_inflate(compressed: &mut Vec<u8>) -> Result<Vec<u8>, io::Erro
         ));
     }
 
-    let mut decompressed: Vec<u8> = Vec::<u8>::new();
-    let mut buffer: Vec<u8> = Vec::<u8>::new();
-    buffer.resize(compressed.len() * 5, 0u8);
+    let mut decompressed: Vec<u8> = vec![];
+    let mut buffer: Vec<u8> = vec![0; compressed.len() * 5];
 
     // let mut buffer: [u8; 1024] = [0; 1024];
 

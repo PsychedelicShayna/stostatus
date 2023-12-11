@@ -15,8 +15,7 @@ pub enum ServerStatus {
 /// JSON strings. Ensures correct parity for braces, brackets, and quotes,
 /// with escaped characters ignored,, so strings with escaped quotes are 
 /// accounted for.
-
-pub fn sanitize_json(data: Vec<u8>) -> Option<Vec<u8>> {
+pub fn sanitize_json(data: &[u8]) -> Option<Vec<u8>> {
     let mut ordering_stack: Vec<u8> = Vec::new();
 
     let mut escaping: bool = false;
@@ -63,10 +62,10 @@ pub fn sanitize_json(data: Vec<u8>) -> Option<Vec<u8>> {
 
 /// Sarches for the first occurence of a JSON key, and extracts its value with
 /// the assumption that the value is a string.
-pub fn extract_json_str(json_data: &Vec<u8>, key: &str) -> Result<String, Error> {
+pub fn extract_json_str(json_data: &[u8], key: &str) -> Result<String, Error> {
     let pattern = format!("\"{}\":\"", key);
 
-    let json_data = sanitize_json(json_data.clone()).ok_or(Error::InvalidJson)?;
+    let json_data = sanitize_json(json_data).ok_or(Error::InvalidJson)?;
 
     let (beg, _) = find_pattern(&pattern.as_bytes().to_vec(), &json_data.clone())
         .ok_or(Error::NoPattern(json_data.clone()))?;
@@ -110,7 +109,7 @@ pub fn check_server_status() -> Result<ServerStatus, Error> {
     let request = http::Request::new(
         domain.to_string(),
         "/server_status/".to_string(),
-        http::Method::GET,
+        http::Method::Get,
         headers,
         None,
     );

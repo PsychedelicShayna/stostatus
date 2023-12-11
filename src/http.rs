@@ -8,15 +8,13 @@ use std::{
 
 #[derive(Debug, Clone, Copy)]
 pub enum Method {
-    POST,
-    GET,
+    Get,
 }
 
 impl From<&Method> for String {
     fn from(value: &Method) -> Self {
         match value {
-            Method::POST => "POST".to_string(),
-            Method::GET => "GET".to_string(),
+            Method::Get => "GET".to_string(),
         }
     }
 }
@@ -58,9 +56,9 @@ impl Request {
         data.push_str(" HTTP/1.1\r\n");
 
         for (key, value) in &self.headers {
-            data.push_str(&key);
+            data.push_str(key);
             data.push_str(": ");
-            data.push_str(&value);
+            data.push_str(value);
             data.push_str("\r\n");
         }
 
@@ -74,18 +72,18 @@ impl Request {
         let http_payload = self.construct();
 
         if let Err(e) = stream.write(http_payload.as_bytes()) {
-            return Err(Error::IoError(e));
+            return Err(Error::Io(e));
         }
 
         stream
             .write(http_payload.as_bytes())
-            .map_err(|e| Error::IoError(e))?;
+            .map_err(Error::Io)?;
 
         // This is already a generous buffer size, but limited to prevent
         // the other side from just streaming as much data as they want.
         let mut buffer: [u8; 16384] = [0; 16384];
 
-        let nbytes_read: usize = stream.read(&mut buffer).map_err(|e| Error::IoError(e))?;
+        let nbytes_read: usize = stream.read(&mut buffer).map_err(Error::Io)?;
 
         if nbytes_read == 0 {
             return Err(Error::NoData);
