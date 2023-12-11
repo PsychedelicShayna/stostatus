@@ -80,12 +80,29 @@ pub fn extract_json_str(json_data: &[u8], key: &str) -> Result<String, Error> {
     Ok(value)
 }
 
+pub fn rot13(string: &str) -> String {
+    string.chars().map(|c| {
+        match c {
+            'a'..='m' | 'A'..='M' => (c as u8 + 13) as char,
+            'n'..='z' | 'N'..='Z' => (c as u8 - 13) as char,
+            _ => c
+        }
+    }).collect()
+}
+
 /// Checks the server status of the Star Trek Online game server.
 pub fn check_server_status() -> Result<ServerStatus, Error> {
-    let domain = "startreklauncher.crypticstudios.com";
+
+    // Avoid hardcoding the domain name in the binary by using Rot13, since
+    // I don't know if GitHub is scraped or monitored for STO's "unofficial"
+    // API that this program uses (even though the launcher does the same)
+    let domain_enc = "fgnegerxynhapure.pelcgvpfghqvbf.pbz";
+    let domain_dec = rot13(domain_enc);
+
+    let domain = domain_dec.as_str();
 
     let headers: Vec<(String, String)> = vec![
-        ("Host", "startreklauncher.crypticstudios.com"),
+        ("Host", domain),
         ("Connection", "keep-alive"),
         ("Content-Length", "0"),
         ("Accept", "application/json, text/javascript, */*, q=0.01"),
@@ -94,10 +111,10 @@ pub fn check_server_status() -> Result<ServerStatus, Error> {
         ("X-Cryptic-Affiliate", "appid=9900"),
         ("X-Cryptic-Version", "3"),
         ("X-Requested-With", "XMLHttpRequest"),
-        ("Origin", "http://startreklauncher.crypticstudios.com"),
+        ("Origin", domain),
         (
             "Referer",
-            "http://startreklauncher.crypticstudios.com/launcher",
+            format!("{}/launcher", domain).as_str()
         ),
         ("Accept-Encoding", "gzip, deflate"),
         ("Accept-Language", "en-US,en,q=0.9"),
