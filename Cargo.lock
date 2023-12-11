@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "sto-server-status"
+name = "stostatus"
 version = "0.1.0"
