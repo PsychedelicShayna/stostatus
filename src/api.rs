@@ -2,7 +2,7 @@ use crate::gzip::gzip_inflate;
 use crate::http;
 use crate::Error;
 
-use crate::pattern::find_pattern;
+use crate::search::find_pattern;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ServerStatus {

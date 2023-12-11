@@ -5,7 +5,6 @@ mod data;
 mod error;
 mod gzip;
 mod http;
-mod pattern;
 mod search;
 
 use api::ServerStatus;

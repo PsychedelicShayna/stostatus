@@ -1,4 +1,4 @@
-use crate::{error::Error, pattern::find_pattern};
+use crate::{error::Error, search::find_pattern};
 
 use std::{
     collections::HashMap,
