@@ -1,6 +1,8 @@
-use std::ffi::{c_ulong, c_void, CStr, CString};
-use std::io::{self, Read, Write};
-use std::os::raw::{c_char, c_int};
+use std::{
+    ffi::{c_ulong, c_void, CStr},
+    io::{self},
+    os::raw::{c_char, c_int},
+};
 
 #[repr(C)]
 struct ZStream {
@@ -23,11 +25,9 @@ struct ZStream {
     reserved: c_ulong,
 }
 
-// ZEXTERN int ZEXPORT inflateInit2_(z_streamp strm, int  windowBits,
-//                                   const char *version, int stream_size);
 #[link(name = "z")]
 extern "C" {
-    fn zlibVersion() -> *const c_char;
+    // fn zlibVersion() -> *const c_char;
 
     fn inflateInit2_(
         strm: *mut ZStream,
@@ -40,13 +40,10 @@ extern "C" {
 }
 
 pub unsafe fn gzip_inflate(compressed: &mut Vec<u8>) -> Result<Vec<u8>, io::Error> {
-    let version = unsafe {
-        let c_str = zlibVersion();
-        CStr::from_ptr(c_str).to_str().unwrap()
-    };
-
-    println!("zlib version: {}", version);
-
+    // let version = unsafe {
+    //     let c_str = zlibVersion();
+    //     CStr::from_ptr(c_str).to_str().unwrap()
+    // };
 
     let mut z_stream = ZStream {
         next_in: compressed.as_mut_ptr(),
@@ -80,7 +77,7 @@ pub unsafe fn gzip_inflate(compressed: &mut Vec<u8>) -> Result<Vec<u8>, io::Erro
     );
 
     if init_result != 0 {
-       let error_message = match init_result {
+        let error_message = match init_result {
             1 => "Stream error: invalid parameter passed to inflateInit2_".to_string(),
             2 => "Memory error: not enough memory to initialize zlib".to_string(),
             6 => "Version error: zlib library version (ZLIB_VERSION) is incompatible with the version assumed by the caller (ZLIB_VERNUM)".to_string(),
@@ -106,19 +103,16 @@ pub unsafe fn gzip_inflate(compressed: &mut Vec<u8>) -> Result<Vec<u8>, io::Erro
         let inflate_result = inflate(&mut z_stream, 0);
 
         // Z_BUF_ERROR
-        if inflate_result == -5 {;
+        if inflate_result == -5 {
             let delta = buffer.len() - z_stream.avail_out as usize;
-            decompressed .extend_from_slice(&buffer[0..delta]);
-        }
-
-        else if inflate_result != 0 && inflate_result != 1 {
+            decompressed.extend_from_slice(&buffer[0..delta]);
+        } else if inflate_result != 0 && inflate_result != 1 {
             // Error or incomplete stream.
             return Err(io::Error::new(
                 io::ErrorKind::Other,
                 format!("Failed to inflate data: {}", inflate_result),
             ));
         }
-
         // Decompression finished
         else {
             let bytes_written = buffer.len() - z_stream.avail_out as usize;
