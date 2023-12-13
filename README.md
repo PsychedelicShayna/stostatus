@@ -1,4 +1,4 @@
-# STO Server Status (for integration with status bars on Linux) 
+# STO Server Status (for Linux status bars) 
 ![](.github/screenshots/statusbar.png)
 
 
