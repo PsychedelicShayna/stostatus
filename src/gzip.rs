@@ -25,6 +25,12 @@ struct ZStream {
     reserved: c_ulong,
 }
 
+impl Drop for ZStream {
+    fn drop(&mut self) {
+        unsafe { inflateEnd(self); }
+    }
+}
+
 #[link(name = "z")]
 extern "C" {
     // fn zlibVersion() -> *const c_char;
@@ -118,15 +124,6 @@ pub unsafe fn gzip_inflate(compressed: &mut Vec<u8>) -> Result<Vec<u8>, io::Erro
             decompressed.extend_from_slice(&buffer[0..bytes_written]);
             break;
         }
-    }
-
-    let result = inflateEnd(&mut z_stream);
-
-    if result != 0 {
-        return Err(io::Error::new(
-            io::ErrorKind::Other,
-            "Failed to end zlib stream",
-        ));
     }
 
     Ok(decompressed)
