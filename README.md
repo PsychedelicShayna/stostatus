@@ -8,7 +8,7 @@ The only dependency is something that every Linux installation should have alrea
 
 Why not just use serde and reqwest? Partly to prove the point that sometimes people are too quick to add dependencies that ultimately bloat the binary and slow compile times, when the functionality needed from the dependency is such a small piece of the dependency as a whole, and that the complexity of that piece is often overestimated; it's not hard to open a TCP socket, send an HTTP request, invoke GZip, sanitize some JSON and look for a substring. Is it really worth adding serde and reqwest just for one tiny operation? 
 
-![](.github/screenshots/cargobuild.png)
+![](.github/screenshots/buildtime.png)
 
 Also because it's fun. 
 
