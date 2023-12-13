@@ -11,5 +11,5 @@ Also because it's fun.
 
 No documentation necessary; it literally just outputs "STO Server Online" or "STO Server Offline" to stdout when run. That's it.
 
-![](.github/assets/screenshots.png)
+![](.github/screenshot.png)
 
