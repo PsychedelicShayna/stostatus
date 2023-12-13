@@ -17,6 +17,7 @@ In the process of working on this, I started writing my own JSON parser, until I
 
 That being said, I'm not insane. While sending an HTTP request over a TCP socket and extracting a substring are both trivial tasks, inflating GZip compressed response data is not. Thankfully, writing FFI bindings to `zlib`, a library present on practically every single Linux installation, is trivial. That means that this utility technically does have one _"dependency"_, in the same sense that `cat` may be a dependency of a shellscript; `zlib` is ubiquitous. Yet, unlike a crate, you can't even tell:
 
+![](.github/screenshots/timedbuild.png)
 
 I'd be lying if I said that there isn't a "for fun" factor involved too, but I do genuinely think that some programmers are too quick to overestimate the complexity of certain tasks, and default to using a library (\*cough\*, leftpad), and that mentality can stop you from ever learning how simple it was the whole time. Seriously, making an HTTP GET request.. is just writing plaintext over a TCP socket. If you can format a string and write to a file, you can format a string and write to a socket. There's no witchcraft involved here. 
 
