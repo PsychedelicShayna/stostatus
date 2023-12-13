@@ -1,4 +1,15 @@
 [package]
+edition = "2021"
 name = "stostatus"
 version = "0.1.0"
-edition = "2021"
+description = "Check if the Star Trek Online servers are down for maintenance, for use with your status bar. Zero depencies on other crates."
+
+license-file = "LICENSE"
+readme = "README.md"
+
+repository = "https://github.com/PsychedelicShayna/stostatus/"
+homepage = "https://github.com/PsychedelicShayna/stostatus/"
+
+categories = ["command-line-utilities", "config"]
+keywords = ["sto", "server-status", "star-trek-online", "status-bar", "i3"]
+
