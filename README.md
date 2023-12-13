@@ -1,4 +1,4 @@
-# STO Status
+# STO Server Status (for integration with status bars on Linux) 
 A command line utility that simply reports whether or not the Star Trek Online game server is down for maintenance or not, by querying the same API that the game's launcher does. Intended for integration with a status bar like i3blocks or i3status, so you can keep track of when the servers come back online, or if they're currently down for maintenance.
 
 This utility, despite performing HTTP requests and handling GZip encoded JSON as a response, has **zero** dependencies. Not. One. Crate.
